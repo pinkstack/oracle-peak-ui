@@ -5,8 +5,8 @@
 
       <span class="quick-tool">
         <a title="Toggle live or pause" v-on:click="live=!live" :class="{live: live, paused: !live}">
-          <div v-if="live"><span class="material-icons">play_circle_filled</span></div>
-          <div v-if="!live"><i class="material-icons">pause</i>️</div>
+          <div v-if="live"><span class="material-icons">pause</span></div>
+          <div v-if="!live">️<span class="material-icons">play_circle_filled</span></div>
         </a>
       </span>
     </h2>
