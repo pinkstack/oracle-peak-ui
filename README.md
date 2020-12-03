@@ -1,6 +1,6 @@
-# oracle-peak-ui
+# 🏔 The Oracle Peak UI 🏔
 
-This is the Vue.js based user interface for [The Oracle Peak 🏔](https://github.com/pinkstack/oracle-peak).
+This is the [Vue.js](https://vuejs.org/) based user interface for [The Oracle Peak 🏔](https://github.com/pinkstack/oracle-peak).
 
 ## Project setup
 ```
