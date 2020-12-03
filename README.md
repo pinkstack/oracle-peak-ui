@@ -1,5 +1,7 @@
 # 🏔 The Oracle Peak UI 🏔
 
+![CI](https://github.com/pinkstack/oracle-peak-ui/workflows/CI/badge.svg?branch=master)
+
 This is the [Vue.js](https://vuejs.org/) based user interface for 
 [The Oracle Peak 🏔](https://github.com/pinkstack/oracle-peak).
 
