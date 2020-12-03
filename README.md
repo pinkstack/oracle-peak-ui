@@ -3,6 +3,7 @@
 ## Project setup
 ```
 npm install
+npm rebuild node-sass
 ```
 
 ### Compiles and hot-reloads for development
