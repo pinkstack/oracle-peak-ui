@@ -1,5 +1,9 @@
-name: Build and Deploy
-on: [push]
+name: CI
+on:
+  push:
+    tags:
+      - master
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
