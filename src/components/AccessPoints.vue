@@ -5,15 +5,15 @@
 
       <span class="quick-tool">
         <a title="Toggle live or pause" v-on:click="live=!live" :class="{live: live, paused: !live}">
-          <span v-if="live">Live ▶️</span>
-          <span v-if="!live">Paused ⏸</span>
+          <div v-if="live"><span class="material-icons">play_circle_filled</span></div>
+          <div v-if="!live"><i class="material-icons">pause</i>️</div>
         </a>
       </span>
     </h2>
 
     <div class="tools tabs">
-      <a v-on:click="activeTab='feed'" :class="{active: activeTab==='feed'}">AP Live Feed</a>
-      <a v-on:click="activeTab='list'" :class="{active: activeTab==='list'}">AP List</a>
+      <a v-on:click="activeTab='feed'" :class="{active: activeTab==='feed'}">Access Points Feed</a>
+      <a v-on:click="activeTab='list'" :class="{active: activeTab==='list'}">Current View</a>
       <a v-on:click="activeTab='events'" :class="{active: activeTab==='events'}">Events</a>
     </div>
 
@@ -121,7 +121,7 @@
             <thead>
             <tr>
               <th style="width: 20%">Meta</th>
-              <td>Event Data</td>
+              <th>Event Data</th>
             </tr>
             </thead>
             <tbody>
@@ -136,7 +136,19 @@
               <td>
                 <ul v-for="(item, index) in renderEventData(event.data)" v-bind:key="item.key + index">
                   <li>
-                    <strong>{{ item.key }}:</strong> {{ item.value }}
+                    <strong>{{ item.key }}:</strong>
+                    <span v-if="!isObject(item.value)">
+                      {{ item.value }}
+                    </span>
+                    <div v-if="isObject(item.value)">
+                      <ul v-for="(item_2, index_2) in renderEventData(item.value)"
+                          v-bind:key="item_2.key + index_2 + 'level2'" style="margin-left: 40px; padding-left: 40px;">
+                        <li>
+                          <strong>{{ item_2.key }}:</strong>
+                          {{ item_2.value }}
+                        </li>
+                      </ul>
+                    </div>
                   </li>
                 </ul>
               </td>
@@ -162,24 +174,6 @@ import {connect} from 'mqtt';
 
 const rainbowBackgroundDirective: DirectiveOptions = {
   inserted(el, node) {
-    const hashString = (input: string): string => {
-      const colors: string[] = [
-        "#e51c23", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5",
-        "#5677fc", "#03a9f4", "#00bcd4", "#009688", "#259b24",
-        "#8bc34a", "#afb42b", "#ff9800", "#ff5722", "#f59602",
-        "#795548", "#607d8b"
-      ];
-
-      let hash = 0;
-      if (input.length === 0) return hash + '';
-      for (let i = 0; i < input.length; i++) {
-        hash = input.charCodeAt(i) + ((hash << 5) - hash);
-        hash = hash & hash;
-      }
-      hash = ((hash % colors.length) + colors.length) % colors.length;
-      return colors[hash];
-    };
-
     const hueString = (input: string): string => {
       let hash = 0;
       if (input.length === 0) return hash + '';
@@ -246,7 +240,7 @@ export default class AccessPoints extends Vue {
   MAX_EVENTS_SIZE = 20;
   locationMeasurements: LocationMeasurement[] = [];
   events: Event[] = [];
-  activeTab: string = 'events' // or list or events
+  activeTab: string = 'feed' // or list or events
   live: boolean = true;
 
   private appendMeasurement(measurement: LocationMeasurement): void {
@@ -314,6 +308,10 @@ export default class AccessPoints extends Vue {
       key: pair[0], value: pair[1]
     })), (item) => !_.isEmpty(item.value))
   }
+
+  isObject(what: any): boolean {
+    return _.isObject(what)
+  }
 }
 </script>
 
@@ -339,19 +337,42 @@ table {
   td, th {
     padding: 5px;
     padding-right: 10px;
-    border-bottom: 1px solid #eeeeee;
 
     p {
       padding: 0;
       margin: 0;
     }
+
+    border-bottom: 1px solid #f4f4f4;
   }
 
   thead td, thead th {
     border-bottom: 2px solid #EEEEEE;
+    padding: 10px;
+    height: 20px;
+  }
+
+  &:first-child {
+    padding-top: 30px;
+  }
+
+  tr:last-child {
+    td, th {
+      // border: none;
+    }
   }
 }
 
+
+@media (prefers-color-scheme: dark) {
+  table, table.table {
+    thead, tbody {
+      td, th {
+        border-bottom: 1px solid #262626;
+      }
+    }
+  }
+}
 
 ul, li {
   list-style: none;
@@ -374,12 +395,14 @@ ul, li {
   }
 }
 
-.tools {
+.tabs {
+  border-bottom: 1px solid #E2E2E2;
   display: block;
   margin-top: 30px;
   margin-bottom: 5px;
   line-height: 26px;
   height: 25px;
+
 
   a {
     background-color: #f2f2f2;
@@ -387,19 +410,11 @@ ul, li {
     padding: 10px;
     border-radius: 4px;
     margin-right: 10px;
-  }
-
-
-}
-
-.tabs {
-  border-bottom: 1px solid #E2E2E2;
-
-  a {
     border-bottom: 0;
     padding-bottom: 5px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    cursor: pointer;
 
     &.active {
       background-color: white;
@@ -408,9 +423,26 @@ ul, li {
 
 }
 
+
 .tabs-container {
   .tab {
     padding: 5px
+  }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .tabs {
+    border-bottom: 1px solid #363337;
+
+    a {
+      background-color: #363337;
+      border-color: #363337;
+
+      &.active {
+        background-color: #2d2a2e;
+      }
+    }
   }
 }
 </style>
