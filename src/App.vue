@@ -9,17 +9,17 @@
       </div>
     </div>
     <div class="content">
-      <AccessPoints/>
+      <LiveView/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import AccessPoints from './components/AccessPoints.vue';
+import LiveView from './components/LiveView.vue';
 
 @Component({
-  components: {AccessPoints},
+  components: {LiveView},
 })
 export default class App extends Vue {
 }
@@ -40,7 +40,7 @@ html, body {
 
 #app .title-bar {
   background-color: #a92a4b;
-  color: #52d2b1;
+  color: #FFF; // #52d2b1;
   line-height: 20px;
   font-size: 13pt;
   padding: 20px;
@@ -78,24 +78,10 @@ h1, h2, h3, th {
   font-family: 'Major Mono Display', monospace;
 }
 
-h2 .quick-tool {
-  display: inline-block;
-  float: right;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10pt;
-
-  a {
-    cursor: pointer;
-
-    &.paused {
-      color: darkred;
-    }
-  }
-}
-
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #232023;
+
     #app {
       color: #EEEEEE;
     }
